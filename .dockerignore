@@ -1,0 +1,17 @@
+**/node_modules
+**/dist
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+**/*.pyc
+.git
+.github
+.vscode
+.idea
+coverage
+*.log
+.DS_Store
+.env
+.env.*

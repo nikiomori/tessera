@@ -1,0 +1,25 @@
+services:
+  tessera:
+    image: tessera:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      # Rate limiting is off by default (suits self-host). For public-facing
+      # deploys, set a positive value like "120" and consider also setting an API key.
+      TESSERA_RATE_LIMIT_PER_MIN: "0"
+      # If set, every /api/* request must send `X-API-Key: <value>`.
+      # Leave commented for open access; uncomment and use a long random string
+      # to lock down a public deploy.
+      # TESSERA_API_KEY: "change-me"
+      # Comma-separated list of origins allowed by CORS (browser clients).
+      # TESSERA_CORS_ORIGINS: "https://qr.example.com"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/api/health', timeout=2).read()"]
+      interval: 30s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
