@@ -33,7 +33,7 @@ docker run --rm -p 8080:8080 ghcr.io/nikiomori/tessera:latest
 # → http://localhost:8080
 ```
 
-Pin a version (`:v0.1.0`, `:0.1`) for prod. Build from source instead:
+Pin a version (`:0.1.0`, `:0.1`) for prod. Build from source instead:
 
 ```bash
 git clone https://github.com/nikiomori/tessera.git
