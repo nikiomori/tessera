@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Live demo
+    url: https://tessera.nikiomori.com/
+    about: Try the hosted version before filing a bug — it tracks main.
+  - name: Security disclosure
+    url: https://github.com/nikiomori/tessera/security/advisories/new
+    about: Report a vulnerability privately. Don't open a public issue.

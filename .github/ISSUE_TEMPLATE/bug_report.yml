@@ -1,0 +1,69 @@
+name: Bug report
+description: Something doesn't work the way the README / API claims it should.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a report. The more concrete the repro, the faster the fix.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug. What did you expect, what did you get?
+      placeholder: |
+        I called POST /api/generate with X and expected a PNG with a centered logo,
+        but the response was a 500 with "list index out of range".
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: Steps, or — even better — the exact `curl` / JSON body you used.
+      placeholder: |
+        curl -X POST http://localhost:8080/api/generate -H 'Content-Type: application/json' -d '{...}'
+      render: bash
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Image tag, commit SHA, or "main @ <date>".
+      placeholder: "ghcr.io main @ 2026-05-09 / commit 2b4caad"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where did this happen?
+      multiple: true
+      options:
+        - Web UI
+        - HTTP API
+        - Docker image
+        - Local dev (uvicorn / vite)
+    validations:
+      required: true
+
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: OS, browser (if Web UI), how you're running Tessera (docker compose, bare uvicorn, …).
+      placeholder: macOS 15.4, Chrome 134, docker compose up
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots
+      description: Backend stderr around the failure, or a screenshot for UI bugs.
+      render: shell
