@@ -46,6 +46,76 @@ from .logo import (
 
 _FINDER_SIZE = 7  # modules
 
+# Alignment-pattern centre positions per QR version, from ISO/IEC 18004 Annex E.
+# Each version's tuple lists row/column positions; alignment patterns sit at every
+# (px, py) combination *except* the three that overlap finder corners.
+_ALIGNMENT_POSITIONS: dict[int, tuple[int, ...]] = {
+    1: (),
+    2: (6, 18),
+    3: (6, 22),
+    4: (6, 26),
+    5: (6, 30),
+    6: (6, 34),
+    7: (6, 22, 38),
+    8: (6, 24, 42),
+    9: (6, 26, 46),
+    10: (6, 28, 50),
+    11: (6, 30, 54),
+    12: (6, 32, 58),
+    13: (6, 34, 62),
+    14: (6, 26, 46, 66),
+    15: (6, 26, 48, 70),
+    16: (6, 26, 50, 74),
+    17: (6, 30, 54, 78),
+    18: (6, 30, 56, 82),
+    19: (6, 30, 58, 86),
+    20: (6, 34, 62, 90),
+    21: (6, 28, 50, 72, 94),
+    22: (6, 26, 50, 74, 98),
+    23: (6, 30, 54, 78, 102),
+    24: (6, 28, 54, 80, 106),
+    25: (6, 32, 58, 84, 110),
+    26: (6, 30, 58, 86, 114),
+    27: (6, 34, 62, 90, 118),
+    28: (6, 26, 50, 74, 98, 122),
+    29: (6, 30, 54, 78, 102, 126),
+    30: (6, 26, 52, 78, 104, 130),
+    31: (6, 30, 56, 82, 108, 134),
+    32: (6, 34, 60, 86, 112, 138),
+    33: (6, 30, 58, 86, 114, 142),
+    34: (6, 34, 62, 90, 118, 146),
+    35: (6, 30, 54, 78, 102, 126, 150),
+    36: (6, 24, 50, 76, 102, 128, 154),
+    37: (6, 28, 54, 80, 106, 132, 158),
+    38: (6, 32, 58, 84, 110, 136, 162),
+    39: (6, 26, 54, 82, 110, 138, 166),
+    40: (6, 30, 58, 86, 114, 142, 170),
+}
+
+
+def _alignment_boxes(n: int) -> set[tuple[int, int]]:
+    """Module coordinates covered by every 5x5 alignment pattern in this matrix.
+
+    Alignment patterns are mandatory grid-registration anchors for QR versions ≥ 2.
+    A silhouette/padding ring that erases or recolours these modules destroys the
+    decoder's ability to unwarp the grid, so we keep them out of both sets.
+    """
+    version = (n - 21) // 4 + 1
+    positions = _ALIGNMENT_POSITIONS.get(version, ())
+    if not positions:
+        return set()
+    last = positions[-1]
+    boxes: set[tuple[int, int]] = set()
+    for cx in positions:
+        for cy in positions:
+            # Skip the three centres that overlap the finder corners.
+            if (cx == 6 and cy == 6) or (cx == 6 and cy == last) or (cx == last and cy == 6):
+                continue
+            for dx in range(-2, 3):
+                for dy in range(-2, 3):
+                    boxes.add((cx + dx, cy + dy))
+    return boxes
+
 
 def _matrix_from(
     data_string: str,
@@ -166,6 +236,19 @@ def _silhouette_sets(
     silhouette, padding, coverage = silhouette_modules(
         mask, matrix_size, logo.space_around, subpixel=subpixel
     )
+
+    alignment = _alignment_boxes(matrix_size)
+    if alignment:
+        # Alignment patterns must survive intact for the decoder to register the
+        # grid. We *keep* them in ``silhouette`` so dark alignment modules get
+        # the logo colour (blending in visually), but pull them out of
+        # ``padding`` so the dark ring/centre never gets cleared. ``coverage``
+        # is forced to 1.0 for these cells so edge-blending doesn't shrink the
+        # alignment dots and ruin contrast.
+        padding -= alignment
+        for cell in alignment:
+            coverage[cell] = 1.0
+
     if logo.preserve_logo_colors:
         colour_map = sample_silhouette_colors(coloured, silhouette, matrix_size)
     else:
@@ -185,6 +268,10 @@ def _silhouette_sets(
             silhouette, padding, coverage = silhouette_modules(
                 mask, matrix_size, eff_space, subpixel=subpixel
             )
+            if alignment:
+                padding -= alignment
+                for cell in alignment:
+                    coverage[cell] = 1.0
             if logo.preserve_logo_colors:
                 colour_map = sample_silhouette_colors(coloured, silhouette, matrix_size)
     return silhouette, padding, colour_map, coverage

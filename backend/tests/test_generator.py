@@ -170,3 +170,33 @@ def test_auto_detail_bumps_matrix_version_for_logo() -> None:
     # The forced version still produces a valid QR.
     qr = segno.make("https://example.com", error="h", version=floor)
     assert qr.version == floor
+
+
+def test_silhouette_preserves_alignment_patterns() -> None:
+    """Padding must never clear alignment-pattern modules; coverage stays full.
+
+    Alignment patterns are mandatory grid-registration anchors for QR versions ≥ 2;
+    if the padding ring overlaps them the decoder cannot unwarp the matrix and
+    scanning fails. We *do* allow silhouette to overlap alignment so the dark
+    modules pick up the logo colour for visual blending, but coverage must be
+    pinned to 1.0 so edge-blending doesn't shrink them. Regression test for the
+    original qr-claude.png case.
+    """
+    from app.core.qr import _alignment_boxes, _silhouette_sets
+
+    logo = LogoConfig(
+        image_data_url=_logo_data_url(),
+        mode=LogoMode.SILHOUETTE,
+        size_ratio=0.6,
+        space_around=2,
+    )
+    style = StyleConfig(matrix_version=12, logo=logo)
+    matrix_size = 65  # version 12
+    silhouette, padding, _, coverage = _silhouette_sets(matrix_size, logo, style)
+    alignment = _alignment_boxes(matrix_size)
+    assert alignment, "version 12 must have alignment patterns"
+    assert not (padding & alignment), "padding ring must not overlap alignment patterns"
+    overlap = silhouette & alignment
+    assert overlap, "expected alignment cells to fall inside the silhouette at this size"
+    for cell in overlap:
+        assert coverage[cell] == 1.0, "alignment-cell coverage must be pinned to 1.0"
