@@ -6,7 +6,8 @@
 Open-source, self-hosted, with a clean HTTP API.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-3b82f6.svg)](LICENSE)
-[![Docker](https://img.shields.io/badge/docker-self--host-2496ED?logo=docker&logoColor=white)](#quick-start)
+[![CI](https://github.com/nikiomori/tessera/actions/workflows/ci.yml/badge.svg)](https://github.com/nikiomori/tessera/actions/workflows/ci.yml)
+[![ghcr.io image](https://img.shields.io/badge/ghcr.io-tessera-2496ED?logo=docker&logoColor=white)](https://github.com/nikiomori/tessera/pkgs/container/tessera)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)](#stack)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](#stack)
 [![Made with Tailwind v4](https://img.shields.io/badge/tailwind-v4-38BDF8?logo=tailwindcss&logoColor=white)](#stack)
@@ -25,11 +26,19 @@ Paste a URL, click **Auto-brand**, ship it. Or skip the UI and call the HTTP API
 
 ## Quick start
 
+The fastest path — pull the published multi-arch image (linux/amd64, linux/arm64):
+
+```bash
+docker run --rm -p 8080:8080 ghcr.io/nikiomori/tessera:latest
+# → http://localhost:8080
+```
+
+Pin a version (`:v0.1.0`, `:0.1`) for prod. Build from source instead:
+
 ```bash
 git clone https://github.com/nikiomori/tessera.git
 cd tessera
 docker compose up -d
-# → http://localhost:8080
 ```
 
 That's the whole install. Single container, ~295 MB, MIT-licensed.
