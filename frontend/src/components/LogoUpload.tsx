@@ -1,4 +1,4 @@
-import { Sparkles, Trash2, Upload } from 'lucide-react';
+import { AlertTriangle, Sparkles, Trash2, Upload } from 'lucide-react';
 import { type ChangeEvent, type DragEvent } from 'react';
 
 import { useQR } from '@/hooks/useQR';
@@ -110,6 +110,15 @@ export function LogoUpload() {
             {Math.round(logo.size_ratio * 100)}%
           </code>
         </div>
+        {logo.size_ratio > 0.55 && (
+          <div className="text-amber-600 dark:text-amber-400 mt-1.5 flex items-start gap-1.5 text-[11px] leading-snug">
+            <AlertTriangle className="mt-px h-3 w-3 shrink-0" />
+            <span>
+              Past ~55% the silhouette eats more modules than the QR's error-correction
+              budget can recover &mdash; scanning may fail. Test before printing.
+            </span>
+          </div>
+        )}
       </Row>
 
       <SilhouetteControls logo={logo} update={update} />
