@@ -1,6 +1,6 @@
 {
   "name": "tessera-frontend",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Branded QR codes where the dots themselves form the logo — frontend.",
   "author": "Tessera contributors",
   "license": "MIT",
