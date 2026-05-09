@@ -8,7 +8,7 @@ Instead, use GitHub's private vulnerability reporting:
 
 > [Report a vulnerability](https://github.com/nikiomori/tessera/security/advisories/new)
 
-Or email **kolya.dubina99@gmail.com** with `[tessera security]` in the subject.
+Or email **nikiomori.x@gmail.com** with `[tessera security]` in the subject.
 
 You'll get an initial response within a few days. Once the fix is ready, we'll
 publish a GitHub Security Advisory and credit the reporter (unless you prefer
