@@ -11,7 +11,7 @@ Open-source, self-hosted, with a clean HTTP API.
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](#stack)
 [![Made with Tailwind v4](https://img.shields.io/badge/tailwind-v4-38BDF8?logo=tailwindcss&logoColor=white)](#stack)
 
-<img src="docs/assets/hero.png" alt="Branded QR codes for github.com, google.com, claude.ai and cloudflare.com — each one shows the site's logo formed by the QR's own modules" width="100%" />
+<img src="docs/assets/hero.png" alt="Branded QR codes for discord.com, google.com, claude.ai and cloudflare.com — each one shows the site's logo formed by the QR's own modules" width="100%" />
 
 </div>
 
