@@ -5,6 +5,7 @@
 **Branded QR codes where the dots themselves form the logo.**
 Open-source, self-hosted, with a clean HTTP API.
 
+[![Live demo](https://img.shields.io/badge/live%20demo-tessera.nikiomori.com-10b981?style=flat)](https://tessera.nikiomori.com/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-3b82f6.svg)](LICENSE)
 [![CI](https://github.com/nikiomori/tessera/actions/workflows/ci.yml/badge.svg)](https://github.com/nikiomori/tessera/actions/workflows/ci.yml)
 [![ghcr.io image](https://img.shields.io/badge/ghcr.io-tessera-2496ED?logo=docker&logoColor=white)](https://github.com/nikiomori/tessera/pkgs/container/tessera)
@@ -12,7 +13,11 @@ Open-source, self-hosted, with a clean HTTP API.
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](#stack)
 [![Made with Tailwind v4](https://img.shields.io/badge/tailwind-v4-38BDF8?logo=tailwindcss&logoColor=white)](#stack)
 
+### **[→ Try it live at tessera.nikiomori.com](https://tessera.nikiomori.com/)** — no install, no sign-up.
+
 <img src="docs/assets/hero.png" alt="Branded QR codes for discord.com, google.com, claude.ai and cloudflare.com — each one shows the site's logo formed by the QR's own modules" width="100%" />
+
+<img src="docs/assets/demo.gif" alt="Paste a URL, click Auto-brand, get a branded QR in three seconds" width="100%" />
 
 </div>
 
@@ -26,7 +31,9 @@ Paste a URL, click **Auto-brand**, ship it. Or skip the UI and call the HTTP API
 
 ## Quick start
 
-The fastest path — pull the published multi-arch image (linux/amd64, linux/arm64):
+Just want to play with it? Open **[tessera.nikiomori.com](https://tessera.nikiomori.com/)** — same UI, hosted by me, free.
+
+For your own deploy, pull the published multi-arch image (linux/amd64, linux/arm64):
 
 ```bash
 docker run --rm -p 8080:8080 ghcr.io/nikiomori/tessera:latest
@@ -42,10 +49,6 @@ docker compose up -d
 ```
 
 That's the whole install. Single container, ~295 MB, MIT-licensed.
-
-<div align="center">
-<img src="docs/assets/screenshot.png" alt="Tessera self-hosted web UI in light mode — claude.ai pasted into the URL field, Auto-brand has fetched the site's logo, and the live QR preview shows the Claude mark formed by the QR's own modules in orange" width="100%" />
-</div>
 
 Prefer to call the API straight away?
 
