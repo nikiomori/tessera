@@ -92,15 +92,15 @@ OpenAPI / Swagger UI at `http://localhost:8080/api/docs`.
 # 1. Fetch the logo
 LOGO=$(curl -sX POST http://localhost:8080/api/logo-from-url \
   -H 'Content-Type: application/json' \
-  -d '{"url":"https://github.com"}' \
+  -d '{"url":"https://discord.com"}' \
   | jq -r .image_data_url)
 
 # 2. Render the QR
 curl -X POST http://localhost:8080/api/generate \
   -H 'Content-Type: application/json' \
-  --output gh.png \
+  --output discord.png \
   -d "{
-    \"data\":  {\"kind\":\"url\",\"url\":\"https://github.com\"},
+    \"data\":  {\"kind\":\"url\",\"url\":\"https://discord.com\"},
     \"style\": {
       \"size\":           600,
       \"matrix_version\": 12,
