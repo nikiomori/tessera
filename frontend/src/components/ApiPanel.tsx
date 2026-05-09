@@ -2,6 +2,7 @@ import { Check, Copy, Terminal } from 'lucide-react';
 import { useMemo, useState, type ReactNode } from 'react';
 
 import { useQR } from '@/hooks/useQR';
+import { pruneSnippetRequest } from '@/lib/prune-snippet-request';
 import { cn } from '@/lib/utils';
 import type { LogoOrigin } from '@/context/qr-store';
 import type { GenerateRequest, LogoConfig } from '@/types/qr';
@@ -84,7 +85,7 @@ function formatJson(value: unknown, indent = 2, depth = 0): string {
 }
 
 function codeForCurl(req: GenerateRequest, source: LogoSource): string {
-  const json = formatJson(withLogoPlaceholder(req));
+  const json = formatJson(pruneSnippetRequest(withLogoPlaceholder(req)));
   const indented = (s: string) =>
     s
       .split('\n')
@@ -122,7 +123,7 @@ JSON`;
 
   // source.kind === 'url' — single call: pass `site_url` and let the
   // backend auto-discover the favicon server-side.
-  const siteJson = formatJson(withSiteUrl(req, source.pageUrl));
+  const siteJson = formatJson(pruneSnippetRequest(withSiteUrl(req, source.pageUrl)));
   return `curl -X POST ${HOST_HINT}/api/generate \\
   -H "Content-Type: application/json" \\
   --fail --output qr.png \\
@@ -132,7 +133,7 @@ JSON`;
 }
 
 function codeForFetch(req: GenerateRequest, source: LogoSource): string {
-  const json = formatJson(withLogoPlaceholder(req), 2, 1);
+  const json = formatJson(pruneSnippetRequest(withLogoPlaceholder(req)), 2, 1);
   const bodyWithVar = json.replace(`"${LOGO_PLACEHOLDER}"`, 'dataUrl');
 
   if (source.kind === 'none') {
@@ -166,7 +167,7 @@ const url = URL.createObjectURL(blob);`;
   }
 
   // Single call: pass `site_url` and let /api/generate auto-fetch the favicon.
-  const siteJson = formatJson(withSiteUrl(req, source.pageUrl), 2, 1);
+  const siteJson = formatJson(pruneSnippetRequest(withSiteUrl(req, source.pageUrl)), 2, 1);
   return `const response = await fetch("${HOST_HINT}/api/generate", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -177,7 +178,7 @@ const url = URL.createObjectURL(blob);`;
 }
 
 function codeForPython(req: GenerateRequest, source: LogoSource): string {
-  const json = formatJson(withLogoPlaceholder(req), 4, 1);
+  const json = formatJson(pruneSnippetRequest(withLogoPlaceholder(req)), 4, 1);
   const bodyWithVar = json.replace(`"${LOGO_PLACEHOLDER}"`, 'data_url');
 
   if (source.kind === 'none') {
@@ -209,7 +210,7 @@ pathlib.Path("qr.png").write_bytes(response.content)`;
   }
 
   // Single call: pass `site_url` and let /api/generate auto-fetch the favicon.
-  const siteJson = formatJson(withSiteUrl(req, source.pageUrl), 4, 1);
+  const siteJson = formatJson(pruneSnippetRequest(withSiteUrl(req, source.pageUrl)), 4, 1);
   return `import requests
 
 response = requests.post(
